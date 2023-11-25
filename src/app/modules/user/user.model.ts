@@ -112,10 +112,10 @@ userSchema.statics.isUserExists = async function (userId: number) {
   return existingUser;
 };
 
-userSchema.statics.deleteSingleUser = async function (userId: number) {
-  const deleteUser = await UserModel.deleteOne({ userId: userId });
-  return deleteUser;
-};
+// userSchema.statics.deleteSingleUser = async function (userId: number) {
+//   const deleteUser = await UserModel.deleteOne({ userId: userId });
+//   return deleteUser;
+// };
 
 // userSchema.statics.updateSingleUser = async function (
 //   userId: number,

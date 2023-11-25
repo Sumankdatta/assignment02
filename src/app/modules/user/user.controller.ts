@@ -39,23 +39,51 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+// const getSingleUser = async (req: Request, res: Response) => {
+//   try {
+//     const userId = Number(req.params.userId);
+
+//     const result = await UserServices.getSingleUserFromDB(userId);
+//     if (!result) {
+//       res.status(200).json({
+//         success: false,
+//         message: 'User not found!',
+//         data: result,
+//       });
+//     } else {
+//       res.status(200).json({
+//         success: true,
+//         message: 'User fetched successfully!',
+//         data: result,
+//       });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: 'something went wrong',
+//       error: error,
+//     });
+//   }
+// };
 const getSingleUser = async (req: Request, res: Response) => {
   try {
-    // const { userId } = req.params;
     const userId: number = Number(req.params.userId);
 
-    const result = await UserServices.getSingleUserFromDB(userId);
-    if (!result) {
+    if (await UserModel.isUserExists(userId)) {
+      const result = await UserServices.getSingleUserFromDB(userId);
       res.status(200).json({
-        success: false,
-        message: 'User not found!',
+        success: true,
+        message: 'User deleted successfully!',
         data: result,
       });
     } else {
-      res.status(200).json({
-        success: true,
-        message: 'User fetched successfully!',
-        data: result,
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
       });
     }
   } catch (error) {
@@ -66,6 +94,9 @@ const getSingleUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+//deleteSingleUser
+
 const deleteSingleUser = async (req: Request, res: Response) => {
   try {
     const userId: number = Number(req.params.userId);

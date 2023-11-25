@@ -12,12 +12,12 @@ const getAllUsersFromDb = async () => {
 };
 
 const getSingleUserFromDB = async (userId: number) => {
-  const existingUser = await UserModel.isUserExists(userId);
+  const existingUser = await UserModel.findOne({ userId });
   return existingUser;
 };
 
 const deleteSingleUserFromDB = async (userId: number) => {
-  const deleteUser = await UserModel.deleteSingleUser(userId);
+  const deleteUser = await UserModel.deleteOne({ userId });
   return deleteUser;
 };
 
@@ -31,14 +31,6 @@ const updateSingleUserFromDb = async (userId: number, updates: User) => {
   return updatedUser;
 };
 
-// const putUserOrderFromDb = async (
-//   userId: number,
-//   orderData: Partial<Order>,
-// ) => {
-//   const orderGiven = await OrderModel.userOrder(userId, orderData);
-//   return orderGiven;
-// };
-
 const putUserOrderFromDb = async (userId: number, orderData: User) => {
   const existingOrder = await UserModel.findOneAndUpdate(
     { userId: userId },
@@ -48,6 +40,7 @@ const putUserOrderFromDb = async (userId: number, orderData: User) => {
 
   return existingOrder;
 };
+
 const getUserOrderFromDb = async (userId: number) => {
   const existingOrder = await UserModel.findOne({ userId: userId }).select([
     'orders',
