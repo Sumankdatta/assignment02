@@ -82,13 +82,23 @@ const updateSingleUser = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
     const updates = req.body;
 
-    const result = await UserServices.updateSingleUserFromDb(userId, updates);
-
-    res.status(200).json({
-      success: true,
-      message: 'User updated successfully!',
-      data: result,
-    });
+    if (await UserModel.isUserExists(userId)) {
+      const result = await UserServices.updateSingleUserFromDb(userId, updates);
+      res.status(200).json({
+        success: true,
+        message: 'User deleted successfully!',
+        data: result,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -136,6 +146,7 @@ const putUserOrder = async (req: Request, res: Response) => {
   try {
     const userId: number = Number(req.params.userId);
     const orderData = req.body;
+
     if (await UserModel.isUserExists(userId)) {
       await UserServices.putUserOrderFromDb(userId, orderData);
       res.status(200).json({

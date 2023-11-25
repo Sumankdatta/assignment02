@@ -74,7 +74,7 @@ const getTotalPriceOfUserOrderFromDb = async (userId: number) => {
   }
 
   const totalPrice = existingOrder.orders?.reduce(
-    (sum, order) => sum + (order.price + order.quantity),
+    (sum, order) => sum + order.price * order.quantity,
     0,
   );
 
