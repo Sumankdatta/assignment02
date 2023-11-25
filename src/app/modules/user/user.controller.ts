@@ -3,6 +3,8 @@ import { UserServices } from './user.service';
 import userZodSchema from './user.zod.validation';
 import { UserModel } from './user.model';
 
+//Create a new user:-
+
 const createUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
@@ -22,6 +24,8 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
+//Retrieve a list of all users:-
+
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await UserServices.getAllUsersFromDb();
@@ -39,32 +43,8 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-// const getSingleUser = async (req: Request, res: Response) => {
-//   try {
-//     const userId = Number(req.params.userId);
+//Retrieve a specific user by ID:-
 
-//     const result = await UserServices.getSingleUserFromDB(userId);
-//     if (!result) {
-//       res.status(200).json({
-//         success: false,
-//         message: 'User not found!',
-//         data: result,
-//       });
-//     } else {
-//       res.status(200).json({
-//         success: true,
-//         message: 'User fetched successfully!',
-//         data: result,
-//       });
-//     }
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: 'something went wrong',
-//       error: error,
-//     });
-//   }
-// };
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const userId: number = Number(req.params.userId);
@@ -95,7 +75,30 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-//deleteSingleUser
+//Update user information
+
+const updateSingleUser = async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.params.userId);
+    const updates = req.body;
+
+    const result = await UserServices.updateSingleUserFromDb(userId, updates);
+
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: error,
+    });
+  }
+};
+
+//Delete a user
 
 const deleteSingleUser = async (req: Request, res: Response) => {
   try {
@@ -127,26 +130,8 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-const updateSingleUser = async (req: Request, res: Response) => {
-  try {
-    const userId = Number(req.params.userId);
-    const updates = req.body;
+//Add New Product in Order
 
-    const result = await UserServices.updateSingleUserFromDb(userId, updates);
-
-    res.status(200).json({
-      success: true,
-      message: 'User updated successfully!',
-      data: result,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Something went wrong',
-      error: error,
-    });
-  }
-};
 const putUserOrder = async (req: Request, res: Response) => {
   try {
     const userId: number = Number(req.params.userId);
@@ -168,14 +153,6 @@ const putUserOrder = async (req: Request, res: Response) => {
         },
       });
     }
-
-    // const result = await UserServices.putUserOrderFromDb(userId, orderData);
-
-    // res.status(200).json({
-    //   success: true,
-    //   message: 'Order created successfully!',
-    //   data: result,
-    // });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -184,6 +161,9 @@ const putUserOrder = async (req: Request, res: Response) => {
     });
   }
 };
+
+//Retrieve all orders for a specific user
+
 const getUserOrder = async (req: Request, res: Response) => {
   try {
     const userId: number = Number(req.params.userId);
@@ -213,6 +193,9 @@ const getUserOrder = async (req: Request, res: Response) => {
     });
   }
 };
+
+//Calculate Total Price of Orders for a Specific User
+
 const getTotalPriceOfUserOrder = async (req: Request, res: Response) => {
   try {
     const userId: number = Number(req.params.userId);

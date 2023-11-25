@@ -112,27 +112,4 @@ userSchema.statics.isUserExists = async function (userId: number) {
   return existingUser;
 };
 
-// userSchema.statics.deleteSingleUser = async function (userId: number) {
-//   const deleteUser = await UserModel.deleteOne({ userId: userId });
-//   return deleteUser;
-// };
-
-// userSchema.statics.updateSingleUser = async function (
-//   userId: number,
-//   data: Partial<User>,
-// ) {
-//   console.log(userId);
-//   // const updatedUser = await UserModel.updateOne(
-//   //   // { userId: userId },
-//   //   // { $set: data },
-//   // );
-//   const updatedUser = await UserModel.findOneAndUpdate(
-//     { userId: userId },
-//     {data},
-//     { new: true, runValidators: true },
-//   );
-
-//   return updatedUser;
-// };
-
 export const UserModel = model<User, UserInterfaceModel>('User', userSchema);
