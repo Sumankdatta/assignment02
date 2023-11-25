@@ -18,7 +18,7 @@ const userOrder = z.object({
 
 const userZodSchema = z.object({
   userId: z.number(),
-  userName: z.string(),
+  username: z.string(),
   password: z.string(),
   fullName: userName,
   age: z.number(),

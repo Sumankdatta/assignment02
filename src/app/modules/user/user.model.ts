@@ -59,7 +59,7 @@ const userSchema = new Schema<User, UserInterfaceModel>({
     unique: true,
     required: [true, 'Student id is required'],
   },
-  userName: {
+  username: {
     type: String,
     required: [true, 'User name is required'],
   },
