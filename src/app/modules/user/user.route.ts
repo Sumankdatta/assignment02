@@ -4,6 +4,11 @@ import { userController } from './user.controller';
 const router = express.Router();
 
 router.put('/:userId/orders', userController.putUserOrder);
+router.get('/:userId/orders', userController.getUserOrder);
+router.get(
+  '/:userId/orders/total-price',
+  userController.getTotalPriceOfUserOrder,
+);
 router.get('/:userId', userController.getSingleUser);
 router.delete('/:userId', userController.deleteSingleUser);
 router.put('/:userId', userController.updateSingleUser);

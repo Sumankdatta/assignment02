@@ -100,7 +100,6 @@ const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
     const updates = req.body;
-    console.log(typeof userId);
 
     const result = await UserServices.updateSingleUserFromDb(userId, updates);
 
@@ -121,14 +120,60 @@ const putUserOrder = async (req: Request, res: Response) => {
   try {
     const userId: number = Number(req.params.userId);
     const orderData = req.body;
+    if (await UserModel.isUserExists(userId)) {
+      await UserServices.putUserOrderFromDb(userId, orderData);
+      res.status(200).json({
+        success: true,
+        message: 'Order created successfully!',
+        data: null,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
 
-    const result = await UserServices.putUserOrderFromDb(userId, orderData);
+    // const result = await UserServices.putUserOrderFromDb(userId, orderData);
 
-    res.status(200).json({
-      success: true,
-      message: 'User updated successfully!',
-      data: result,
+    // res.status(200).json({
+    //   success: true,
+    //   message: 'Order created successfully!',
+    //   data: result,
+    // });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: error,
     });
+  }
+};
+const getUserOrder = async (req: Request, res: Response) => {
+  try {
+    const userId: number = Number(req.params.userId);
+
+    if (await UserModel.isUserExists(userId)) {
+      const result = await UserServices.getUserOrderFromDb(userId);
+      res.status(200).json({
+        success: true,
+        message: 'Order fetched successfully!',
+        data: result,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -145,4 +190,5 @@ export const userController = {
   deleteSingleUser,
   updateSingleUser,
   putUserOrder,
+  getUserOrder,
 };

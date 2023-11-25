@@ -48,6 +48,28 @@ const putUserOrderFromDb = async (userId: number, orderData: User) => {
 
   return existingOrder;
 };
+const getUserOrderFromDb = async (userId: number) => {
+  const existingOrder = await UserModel.findOne({ userId: userId }).select([
+    'orders',
+    '-_id',
+  ]);
+
+  return existingOrder;
+};
+const getTotalPriceOfUserOrderFromDb = async (userId: number) => {
+  const existingOrder = await UserModel.findOne({ userId: userId });
+
+  if (!existingOrder) {
+    return 0;
+  }
+
+  const totalPrice = existingOrder.orders?.reduce(
+    (sum, order) => sum + (order.price + order.quantity),
+    0,
+  );
+
+  return totalPrice;
+};
 
 export const UserServices = {
   createUserIntoDb,
@@ -56,4 +78,6 @@ export const UserServices = {
   deleteSingleUserFromDB,
   updateSingleUserFromDb,
   putUserOrderFromDb,
+  getUserOrderFromDb,
+  getTotalPriceOfUserOrderFromDb,
 };
