@@ -182,6 +182,36 @@ const getUserOrder = async (req: Request, res: Response) => {
     });
   }
 };
+const getTotalPriceOfUserOrder = async (req: Request, res: Response) => {
+  try {
+    const userId: number = Number(req.params.userId);
+
+    if (await UserModel.isUserExists(userId)) {
+      const result = await UserServices.getTotalPriceOfUserOrderFromDb(userId);
+
+      res.status(200).json({
+        success: true,
+        message: 'Order fetched successfully!',
+        data: { totalPrice: result },
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: error,
+    });
+  }
+};
 
 export const userController = {
   createUser,
@@ -191,4 +221,5 @@ export const userController = {
   updateSingleUser,
   putUserOrder,
   getUserOrder,
+  getTotalPriceOfUserOrder,
 };
