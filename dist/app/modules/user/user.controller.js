@@ -16,6 +16,7 @@ exports.userController = void 0;
 const user_service_1 = require("./user.service");
 const user_zod_validation_1 = __importDefault(require("./user.zod.validation"));
 const user_model_1 = require("./user.model");
+//Create a new user:-
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userData = req.body;
@@ -35,6 +36,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
+//Retrieve a list of all users:-
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_service_1.UserServices.getAllUsersFromDb();
@@ -52,31 +54,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 });
-// const getSingleUser = async (req: Request, res: Response) => {
-//   try {
-//     const userId = Number(req.params.userId);
-//     const result = await UserServices.getSingleUserFromDB(userId);
-//     if (!result) {
-//       res.status(200).json({
-//         success: false,
-//         message: 'User not found!',
-//         data: result,
-//       });
-//     } else {
-//       res.status(200).json({
-//         success: true,
-//         message: 'User fetched successfully!',
-//         data: result,
-//       });
-//     }
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: 'something went wrong',
-//       error: error,
-//     });
-//   }
-// };
+//Retrieve a specific user by ID:-
 const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = Number(req.params.userId);
@@ -107,7 +85,39 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
 });
-//deleteSingleUser
+//Update user information
+const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = Number(req.params.userId);
+        const updates = req.body;
+        if (yield user_model_1.UserModel.isUserExists(userId)) {
+            const result = yield user_service_1.UserServices.updateSingleUserFromDb(userId, updates);
+            res.status(200).json({
+                success: true,
+                message: 'User deleted successfully!',
+                data: result,
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: 'User not found',
+                error: {
+                    code: 404,
+                    description: 'User not found!',
+                },
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Something went wrong',
+            error: error,
+        });
+    }
+});
+//Delete a user
 const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = Number(req.params.userId);
@@ -138,25 +148,7 @@ const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         });
     }
 });
-const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const userId = Number(req.params.userId);
-        const updates = req.body;
-        const result = yield user_service_1.UserServices.updateSingleUserFromDb(userId, updates);
-        res.status(200).json({
-            success: true,
-            message: 'User updated successfully!',
-            data: result,
-        });
-    }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Something went wrong',
-            error: error,
-        });
-    }
-});
+//Add New Product in Order
 const putUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = Number(req.params.userId);
@@ -179,12 +171,6 @@ const putUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 },
             });
         }
-        // const result = await UserServices.putUserOrderFromDb(userId, orderData);
-        // res.status(200).json({
-        //   success: true,
-        //   message: 'Order created successfully!',
-        //   data: result,
-        // });
     }
     catch (error) {
         res.status(500).json({
@@ -194,6 +180,7 @@ const putUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
 });
+//Retrieve all orders for a specific user
 const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = Number(req.params.userId);
@@ -224,6 +211,7 @@ const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
 });
+//Calculate Total Price of Orders for a Specific User
 const getTotalPriceOfUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = Number(req.params.userId);

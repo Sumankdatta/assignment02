@@ -116,26 +116,4 @@ userSchema.statics.isUserExists = function (userId) {
         return existingUser;
     });
 };
-userSchema.statics.deleteSingleUser = function (userId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const deleteUser = yield exports.UserModel.deleteOne({ userId: userId });
-        return deleteUser;
-    });
-};
-// userSchema.statics.updateSingleUser = async function (
-//   userId: number,
-//   data: Partial<User>,
-// ) {
-//   console.log(userId);
-//   // const updatedUser = await UserModel.updateOne(
-//   //   // { userId: userId },
-//   //   // { $set: data },
-//   // );
-//   const updatedUser = await UserModel.findOneAndUpdate(
-//     { userId: userId },
-//     {data},
-//     { new: true, runValidators: true },
-//   );
-//   return updatedUser;
-// };
 exports.UserModel = (0, mongoose_1.model)('User', userSchema);
