@@ -28,11 +28,8 @@ export type User = {
   hobbies: string[];
   address: UserAddress;
   orders?: Order[];
-  // deletedCount: number;
 };
 
 export interface UserInterfaceModel extends Model<User> {
   isUserExists(userId: number): Promise<User | null>;
-  updateSingleUser(userId: number): Promise<User | null>;
-  deleteSingleUser(userId: number): Promise<User | null>;
 }
