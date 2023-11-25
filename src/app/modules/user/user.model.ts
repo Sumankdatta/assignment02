@@ -1,5 +1,11 @@
 import { Schema, model } from 'mongoose';
-import { User, UserAddress, userName } from './user.interface';
+import {
+  Order,
+  User,
+  UserAddress,
+  UserInterfaceModel,
+  userName,
+} from './user.interface';
 import isEmail from 'validator/lib/isEmail';
 import config from '../../config';
 import bcrypt from 'bcrypt';
@@ -32,7 +38,22 @@ const userAddressSchema = new Schema<UserAddress>({
   },
 });
 
-const userSchema = new Schema<User>({
+const orderSchema = new Schema<Order>({
+  productName: {
+    type: String,
+    required: [true, 'Product name is required'],
+  },
+  price: {
+    type: Number,
+    required: [true, 'Product name is required'],
+  },
+  quantity: {
+    type: Number,
+    required: [true, 'Product name is required'],
+  },
+});
+
+const userSchema = new Schema<User, UserInterfaceModel>({
   userId: {
     type: Number,
     unique: true,
@@ -73,6 +94,7 @@ const userSchema = new Schema<User>({
     required: true,
   },
   address: userAddressSchema,
+  orders: [orderSchema],
 });
 
 userSchema.pre('save', async function (next) {
@@ -85,4 +107,32 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
-export const UserModel = model<User>('User', userSchema);
+userSchema.statics.isUserExists = async function (userId: number) {
+  const existingUser = await UserModel.findOne({ userId });
+  return existingUser;
+};
+
+userSchema.statics.deleteSingleUser = async function (userId: number) {
+  const deleteUser = await UserModel.deleteOne({ userId: userId });
+  return deleteUser;
+};
+
+// userSchema.statics.updateSingleUser = async function (
+//   userId: number,
+//   data: Partial<User>,
+// ) {
+//   console.log(userId);
+//   // const updatedUser = await UserModel.updateOne(
+//   //   // { userId: userId },
+//   //   // { $set: data },
+//   // );
+//   const updatedUser = await UserModel.findOneAndUpdate(
+//     { userId: userId },
+//     {data},
+//     { new: true, runValidators: true },
+//   );
+
+//   return updatedUser;
+// };
+
+export const UserModel = model<User, UserInterfaceModel>('User', userSchema);
