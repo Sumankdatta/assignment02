@@ -94,7 +94,7 @@ const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
             const result = yield user_service_1.UserServices.updateSingleUserFromDb(userId, updates);
             res.status(200).json({
                 success: true,
-                message: 'User deleted successfully!',
+                message: 'User update successfully!',
                 data: result,
             });
         }

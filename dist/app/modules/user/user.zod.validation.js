@@ -17,7 +17,7 @@ const userOrder = zod_1.z.object({
 });
 const userZodSchema = zod_1.z.object({
     userId: zod_1.z.number(),
-    userName: zod_1.z.string(),
+    username: zod_1.z.string(),
     password: zod_1.z.string(),
     fullName: userName,
     age: zod_1.z.number(),

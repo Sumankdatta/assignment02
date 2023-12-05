@@ -86,7 +86,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
       const result = await UserServices.updateSingleUserFromDb(userId, updates);
       res.status(200).json({
         success: true,
-        message: 'User deleted successfully!',
+        message: 'User update successfully!',
         data: result,
       });
     } else {

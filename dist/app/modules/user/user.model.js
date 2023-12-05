@@ -63,7 +63,7 @@ const userSchema = new mongoose_1.Schema({
         unique: true,
         required: [true, 'Student id is required'],
     },
-    userName: {
+    username: {
         type: String,
         required: [true, 'User name is required'],
     },

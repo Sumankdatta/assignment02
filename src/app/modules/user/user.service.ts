@@ -11,7 +11,7 @@ const createUserIntoDb = async (user: User) => {
 //Retrieve a list of all users service
 
 const getAllUsersFromDb = async () => {
-  const result = await UserModel.find();
+  const result = await UserModel.find().select('-password').select('-orders');
   return result;
 };
 
@@ -24,7 +24,10 @@ const getSingleUserFromDB = async (userId: number) => {
 
 //Update user information service
 
-const updateSingleUserFromDb = async (userId: number, updates: User) => {
+const updateSingleUserFromDb = async (
+  userId: number,
+  updates: Partial<User>,
+) => {
   const updatedUser = await UserModel.findOneAndUpdate(
     { userId: userId },
     { $set: updates },
